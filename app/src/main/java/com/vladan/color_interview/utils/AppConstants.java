@@ -14,6 +14,7 @@ public class AppConstants {
     public static String IDENTITY = "user";
     public static String ALGORITHM = "HS256";
     public static String TYPE = "JWT";
+    public static String KEY_PERSON_ID = "person_id";
 
     public static String checkOrCreateJWT(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);

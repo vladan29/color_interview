@@ -20,4 +20,14 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.container, listFragment).commit();
         }
     }
+
+    public void show(String id) {
+        PersonFragment personFragment = PersonFragment.forPerson(id);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("person")
+                .replace(R.id.container, personFragment, null).commit();
+
+    }
 }

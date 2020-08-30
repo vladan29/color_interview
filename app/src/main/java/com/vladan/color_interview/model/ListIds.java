@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by vladan on 8/29/2020
  */
 public class ListIds {
- public String status;
- public ArrayList<String> data;
+    public String status;
+    public ArrayList<String> data;
 
 }

@@ -21,7 +21,7 @@ public class AppApplication extends Application {
         mInstance = this;
     }
 
-    private static synchronized AppApplication getInstance(){
+    private static synchronized AppApplication getInstance() {
         return mInstance;
     }
 }

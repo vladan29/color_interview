@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,7 +26,7 @@ import com.vladan.color_interview.viewmodel.ListViewModel;
 /**
  * Created by vladan on 8/29/2020
  */
-public class ListFragment extends Fragment implements ListIdsAdapter.OnItemClickListener{
+public class ListFragment extends Fragment implements ListIdsAdapter.OnItemClickListener {
     private ListIdsAdapter mListIdsAdapter;
     private FragmentListIdsBinding mBinding;
     private ListViewModel mListViewModel;
@@ -34,14 +35,14 @@ public class ListFragment extends Fragment implements ListIdsAdapter.OnItemClick
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T)new ListViewModel(getActivity());
+            return (T) new ListViewModel(getActivity());
         }
     };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListViewModel = new ViewModelProvider(this,mFactory).get(ListViewModel.class);
+        mListViewModel = new ViewModelProvider(this, mFactory).get(ListViewModel.class);
 
     }
 
@@ -50,14 +51,14 @@ public class ListFragment extends Fragment implements ListIdsAdapter.OnItemClick
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_ids, container, false);
-       listIds= mBinding.recyclerListIds;
-        return (View)mBinding.getRoot();
+        listIds = mBinding.recyclerListIds;
+        return (View) mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListIdsAdapter = new ListIdsAdapter(mListViewModel,this);
+        mListIdsAdapter = new ListIdsAdapter(mListViewModel, this);
         listIds.setAdapter(mListIdsAdapter);
         listIds.setLayoutManager(new LinearLayoutManager(getContext()));
         mListIdsAdapter.SetOnItemClickListener(this);
@@ -79,9 +80,10 @@ public class ListFragment extends Fragment implements ListIdsAdapter.OnItemClick
         });
     }
 
-
     @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(),String.valueOf(position),Toast.LENGTH_LONG).show();
+    public void onItemClick(View view, int position, String id) {
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+            ((MainActivity) getActivity()).show(id);
+        }
     }
 }

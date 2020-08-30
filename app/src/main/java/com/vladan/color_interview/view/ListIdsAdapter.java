@@ -58,20 +58,20 @@ public class ListIdsAdapter extends RecyclerView.Adapter<ListIdsAdapter.ListIdsV
 
         public ListIdsViewHolder(@NonNull View itemView) {
             super(itemView);
-            personId=itemView.findViewById(R.id.personId);
+            personId = itemView.findViewById(R.id.personId);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (itemClickListener != null) {
-                itemClickListener.onItemClick(view, getAdapterPosition());
+                itemClickListener.onItemClick(view, getAdapterPosition(), mIdsList.get(getAdapterPosition()));
             }
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position, String id);
     }
 
     public void SetOnItemClickListener(final OnItemClickListener itemClickListener) {

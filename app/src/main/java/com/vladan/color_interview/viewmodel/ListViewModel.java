@@ -17,13 +17,13 @@ public class ListViewModel extends ViewModel {
     private final LiveData<ListIds> mListIdsLiveData;
 
 
-    public ListViewModel(Context context){
-        ListAndPersonRepository repository = new ListAndPersonRepository(RetrofitService.create(context));
+    public ListViewModel(Context context) {
+        ListAndPersonRepository repository = ListAndPersonRepository.getInstance(RetrofitService.create(context, null), context);
         mListIdsLiveData = repository.getIdList();
     }
 
-   public LiveData<ListIds> getListIdsLiveData(){
+    public LiveData<ListIds> getListIdsLiveData() {
         return mListIdsLiveData;
-   }
+    }
 
 }
