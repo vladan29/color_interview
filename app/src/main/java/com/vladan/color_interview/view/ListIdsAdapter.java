@@ -30,7 +30,7 @@ public class ListIdsAdapter extends RecyclerView.Adapter<ListIdsAdapter.ListIdsV
 
         viewModel.getListIdsLiveData().observe(lifecycleOwner, ListIds -> {
             mIdsList.clear();
-            if (ListIds.data != null) {
+            if (ListIds != null &&ListIds.data!=null) {
                 mIdsList.addAll(ListIds.data);
             }
         });
