@@ -28,8 +28,7 @@ class PersonFragment : Fragment() {
     private var tvAge: TextView? = null
     private var tvGender: TextView? = null
     private var tvCountry: TextView? = null
-    var person: Map<String, String>? = null
-    var mFactory: ViewModelProvider.Factory? = object : ViewModelProvider.Factory {
+    private var mFactory: ViewModelProvider.Factory? = object : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return PersonViewModel(activity, mId) as T
@@ -38,7 +37,7 @@ class PersonFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewModel = ViewModelProvider(activity!!, mFactory!!).get(PersonViewModel::class.java)
+        mViewModel = ViewModelProvider(this, mFactory!!).get(PersonViewModel::class.java)
         mFactory=null
     }
 
