@@ -1,13 +1,12 @@
-package com.vladan.color_interview.utils;
+package com.vladan.color_interview.utils
 
-import java.util.UUID;
+import java.util.*
 
 /**
  * Created by vladan on 8/27/2020
  */
-public class UuidGenerator {
-
-    public static String generateUuid() {
-        return UUID.randomUUID().toString();
+object UuidGenerator {
+    fun generateUuid(): String {
+        return UUID.randomUUID().toString()
     }
 }

@@ -1,32 +1,27 @@
-package com.vladan.color_interview.utils;
+package com.vladan.color_interview.utils
 
-import android.util.Base64;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import android.util.Base64
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import java.util.*
 
 /**
  * Created by vladan on 8/27/2020
  */
-public class JWTUtils {
-
-    public static String createJWT(String alg, String typ, String uuid, String identity) {
-        Map<String, Object> payloadMap = new HashMap<>();
-        Map<String, Object> headerMap = new HashMap<>();
-        headerMap.put("alg", alg);
-        headerMap.put("typ", typ);
-        payloadMap.put("uid", uuid);
-        payloadMap.put("identity", identity);
-        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-        String encoded = Base64.encodeToString("$SECRET$".getBytes(), Base64.NO_WRAP);
+object JWTUtils {
+    fun createJWT(alg: String, typ: String, uuid: String, identity: String): String {
+        val payloadMap: MutableMap<String, Any> = HashMap()
+        val headerMap: MutableMap<String, Any> = HashMap()
+        headerMap["alg"] = alg
+        headerMap["typ"] = typ
+        payloadMap["uid"] = uuid
+        payloadMap["identity"] = identity
+        val signatureAlgorithm = SignatureAlgorithm.HS256
+        val encoded = Base64.encodeToString("\$SECRET$".toByteArray(), Base64.NO_WRAP)
         return Jwts.builder()
-                .setHeader(headerMap)
-                .setClaims(payloadMap)
-                .signWith(signatureAlgorithm, encoded.getBytes())
-                .compact();
+            .setHeader(headerMap)
+            .setClaims(payloadMap)
+            .signWith(signatureAlgorithm, encoded.toByteArray())
+            .compact()
     }
 }

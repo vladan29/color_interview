@@ -1,47 +1,33 @@
-package com.vladan.color_interview.viewmodel;
+package com.vladan.color_interview.viewmodel
 
-import android.content.Context;
-import android.view.inputmethod.CursorAnchorInfo;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.vladan.color_interview.Repository.ListAndPersonRepository;
-import com.vladan.color_interview.api.RetrofitService;
-import com.vladan.color_interview.model.Person;
-
-import java.lang.reflect.Type;
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.google.gson.*
+import com.vladan.color_interview.Repository.ListAndPersonRepository.Companion.getInstance
+import com.vladan.color_interview.api.RetrofitService.create
+import com.vladan.color_interview.model.Person
+import java.lang.reflect.Type
 
 /**
  * Created by vladan on 8/30/2020
  */
-public class PersonViewModel extends ViewModel {
-    private final LiveData<Person> mPersonLiveData;
-    Gson mGson = new GsonBuilder().registerTypeAdapter(Person.class, new CustomDeserializer<>()).create();
+class PersonViewModel(context: Context?, id: String?) : ViewModel() {
+    var personLiveData: MutableLiveData<Person?>? = null
+    var mGson =
+        GsonBuilder().registerTypeAdapter(Person::class.java, CustomDeserializer<Any>()).create()
 
-    public PersonViewModel(Context context, String id) {
-        ListAndPersonRepository repository = ListAndPersonRepository.getInstance(RetrofitService.create(context, mGson), context);
-        mPersonLiveData = repository.getPersonDetails(id);
-    }
-
-    public LiveData<Person> getPersonLiveData() {
-        return mPersonLiveData;
-    }
-
-    static class CustomDeserializer<T> implements JsonDeserializer<T> {
-        @Override
-        public T deserialize(JsonElement je, Type type, JsonDeserializationContext jdc)
-                throws JsonParseException {
-            JsonElement content = je.getAsJsonObject().get("data");
-
-            return new Gson().fromJson(content, type);
-
+    internal class CustomDeserializer<T> : JsonDeserializer<T> {
+        @Throws(JsonParseException::class)
+        override fun deserialize(je: JsonElement, type: Type, jdc: JsonDeserializationContext): T {
+            val content = je.asJsonObject["data"]
+            return Gson().fromJson(content, type)
         }
+    }
+
+    init {
+        val repository = getInstance(create(context, mGson), context)
+        personLiveData = repository?.getPersonDetails(id = id)
     }
 }

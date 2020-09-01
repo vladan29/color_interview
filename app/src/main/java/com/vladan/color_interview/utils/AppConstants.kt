@@ -1,31 +1,29 @@
-package com.vladan.color_interview.utils;
+package com.vladan.color_interview.utils
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
 
 /**
  * Created by vladan on 8/29/2020
  */
-public class AppConstants {
-
+class AppConstants {
+    companion object{
     //Prefs keys
-    public static String PREFS_NAME = "color";
-    public static String JWT_TOKEN_KEY = "JWT";
-    public static String IDENTITY = "user";
-    public static String ALGORITHM = "HS256";
-    public static String TYPE = "JWT";
-    public static String KEY_PERSON_ID = "person_id";
+    const val PREFS_NAME = "color"
+    const val JWT_TOKEN_KEY = "JWT"
+    const val IDENTITY = "user"
+    const val ALGORITHM = "HS256"
+    const val TYPE = "JWT"
+    const val KEY_PERSON_ID = "person_id"
 
-    public static String checkOrCreateJWT(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String JWTToken = sharedPreferences.getString(JWT_TOKEN_KEY, "");
-        assert JWTToken != null;
-        if (JWTToken.equals("")) {
-            String uuid = UuidGenerator.generateUuid();
-            String generatedJWTToken = JWTUtils.createJWT(ALGORITHM, TYPE, uuid, IDENTITY);
-            sharedPreferences.edit().putString(JWT_TOKEN_KEY, generatedJWTToken).apply();
-            JWTToken = generatedJWTToken;
+    fun checkOrCreateJWT(context: Context): String? {
+        val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        var JWTToken = sharedPreferences.getString(JWT_TOKEN_KEY, "")!!
+        if (JWTToken == "") {
+            val uuid = UuidGenerator.generateUuid()
+            val generatedJWTToken = JWTUtils.createJWT(ALGORITHM, TYPE, uuid, IDENTITY)
+            sharedPreferences.edit().putString(JWT_TOKEN_KEY, generatedJWTToken).apply()
+            JWTToken = generatedJWTToken
         }
-        return JWTToken;
+        return JWTToken
     }
-}
+}}

@@ -1,29 +1,20 @@
-package com.vladan.color_interview.viewmodel;
+package com.vladan.color_interview.viewmodel
 
-import android.content.Context;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.vladan.color_interview.Repository.ListAndPersonRepository;
-import com.vladan.color_interview.api.RetrofitService;
-import com.vladan.color_interview.model.ListIds;
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.vladan.color_interview.Repository.ListAndPersonRepository.Companion.getInstance
+import com.vladan.color_interview.api.RetrofitService.create
+import com.vladan.color_interview.model.ListIds
 
 /**
  * Created by vladan on 8/29/2020
  */
-public class ListViewModel extends ViewModel {
+class ListViewModel(context: Context?) : ViewModel() {
+    val listIdsLiveData: LiveData<ListIds?>
 
-    private final LiveData<ListIds> mListIdsLiveData;
-
-
-    public ListViewModel(Context context) {
-        ListAndPersonRepository repository = ListAndPersonRepository.getInstance(RetrofitService.create(context, null), context);
-        mListIdsLiveData = repository.getIdList();
+    init {
+        val repository = getInstance(create(context, null), context)
+        listIdsLiveData = repository!!.idList
     }
-
-    public LiveData<ListIds> getListIdsLiveData() {
-        return mListIdsLiveData;
-    }
-
 }

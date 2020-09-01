@@ -1,80 +1,68 @@
-package com.vladan.color_interview.view;
+package com.vladan.color_interview.view
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.vladan.color_interview.R;
-import com.vladan.color_interview.viewmodel.ListViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import com.vladan.color_interview.R
+import com.vladan.color_interview.model.ListIds
+import com.vladan.color_interview.view.ListIdsAdapter.ListIdsViewHolder
+import com.vladan.color_interview.viewmodel.ListViewModel
+import java.util.*
 
 /**
  * Created by vladan on 8/29/2020
  */
-public class ListIdsAdapter extends RecyclerView.Adapter<ListIdsAdapter.ListIdsViewHolder> {
-
-
-    private List<String> mIdsList = new ArrayList<>();
-    private OnItemClickListener itemClickListener;
-    TextView personId;
-
-
-    public ListIdsAdapter(ListViewModel viewModel, LifecycleOwner lifecycleOwner) {
-
-        viewModel.getListIdsLiveData().observe(lifecycleOwner, ListIds -> {
-            mIdsList.clear();
-            if (ListIds != null &&ListIds.data!=null) {
-                mIdsList.addAll(ListIds.data);
-            }
-        });
+class ListIdsAdapter(viewModel: ListViewModel, lifecycleOwner: LifecycleOwner?) :
+    RecyclerView.Adapter<ListIdsViewHolder>() {
+    private val mIdsList: MutableList<String> = ArrayList()
+    private var itemClickListener: OnItemClickListener? = null
+    var personId: TextView? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListIdsViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_ids_item, parent, false)
+        return ListIdsViewHolder(view)
     }
 
-    @NonNull
-    @Override
-    public ListIdsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_ids_item, parent, false);
-        return new ListIdsViewHolder(view);
+    override fun onBindViewHolder(holder: ListIdsViewHolder, position: Int) {
+        personId!!.text = mIdsList[position]
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ListIdsViewHolder holder, int position) {
-        personId.setText(mIdsList.get(position));
+    override fun getItemCount(): Int {
+        return mIdsList.size
     }
 
-    @Override
-    public int getItemCount() {
-        return mIdsList.size();
-    }
-
-    public class ListIdsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-
-        public ListIdsViewHolder(@NonNull View itemView) {
-            super(itemView);
-            personId = itemView.findViewById(R.id.personId);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
+    inner class ListIdsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+        override fun onClick(view: View) {
             if (itemClickListener != null) {
-                itemClickListener.onItemClick(view, getAdapterPosition(), mIdsList.get(getAdapterPosition()));
+                itemClickListener!!.onItemClick(view, adapterPosition, mIdsList[adapterPosition])
             }
+        }
+
+        init {
+            personId = itemView.findViewById(R.id.personId)
+            itemView.setOnClickListener(this)
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position, String id);
+    interface OnItemClickListener {
+        fun onItemClick(view: View?, position: Int, id: String?)
     }
 
-    public void SetOnItemClickListener(final OnItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
+    fun SetOnItemClickListener(itemClickListener: OnItemClickListener?) {
+        this.itemClickListener = itemClickListener
+    }
+
+    init {
+        viewModel.listIdsLiveData.observe(lifecycleOwner!!, Observer { ListIds: ListIds? ->
+            mIdsList.clear()
+            if (ListIds?.data != null) {
+                mIdsList.addAll(ListIds.data!!)
+            }
+        })
     }
 }

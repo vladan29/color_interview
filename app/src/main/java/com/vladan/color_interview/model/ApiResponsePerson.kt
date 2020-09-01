@@ -1,20 +1,15 @@
-package com.vladan.color_interview.model;
+package com.vladan.color_interview.model
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by vladan on 8/28/2020
  */
-public class ApiResponsePerson {
+class ApiResponsePerson {
     @SerializedName("status")
-    public String status;
+    var status: String? = null
 
+    @JvmField
     @SerializedName("data")
-    public Person data;
-
+    var data: Person? = null
 }
-
-
-
-
-

@@ -1,14 +1,19 @@
-package com.vladan.color_interview.model;
+package com.vladan.color_interview.model
 
 /**
  * Created by vladan on 9/1/2020
  */
-public class Person {
-
-    public String id;
-    public String firstName;
-    public String lastName;
-    public String age;
-    public String gender;
-    public String country;
+class Person {
+    @JvmField
+    var id: String? = null
+    @JvmField
+    var firstName: String? = null
+    @JvmField
+    var lastName: String? = null
+    @JvmField
+    var age: String? = null
+    @JvmField
+    var gender: String? = null
+    @JvmField
+    var country: String? = null
 }

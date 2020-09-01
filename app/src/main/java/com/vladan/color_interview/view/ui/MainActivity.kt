@@ -1,33 +1,34 @@
-package com.vladan.color_interview.view.ui;
+package com.vladan.color_interview.view.ui
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.vladan.color_interview.R
 
-import android.os.Bundle;
+class MainActivity : AppCompatActivity() {
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 
-import com.vladan.color_interview.R;
-
-public class MainActivity extends AppCompatActivity {
-    private static String TAG = "MainActivity";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            ListFragment listFragment = new ListFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, listFragment).commit();
+            val listFragment = ListFragment()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, listFragment).commit()
         }
     }
 
-    public void show(String id) {
-        PersonFragment personFragment = PersonFragment.forPerson(id);
+    fun show(id: String?) {
+        val personFragment = PersonFragment.forPerson(id)
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack("person")
+            .replace(R.id.container, personFragment, null).commit()
+    }
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addToBackStack("person")
-                .replace(R.id.container, personFragment, null).commit();
+    override fun onBackPressed() {
 
+        super.onBackPressed()
     }
 }
