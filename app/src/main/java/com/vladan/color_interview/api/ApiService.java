@@ -2,6 +2,7 @@ package com.vladan.color_interview.api;
 
 import com.vladan.color_interview.model.ListIds;
 import com.vladan.color_interview.model.ApiResponsePerson;
+import com.vladan.color_interview.model.Person;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

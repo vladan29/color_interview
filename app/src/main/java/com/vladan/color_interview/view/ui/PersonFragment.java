@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.vladan.color_interview.R;
 import com.vladan.color_interview.databinding.FragmentPersonBinding;
 import com.vladan.color_interview.model.ApiResponsePerson;
+import com.vladan.color_interview.model.Person;
 import com.vladan.color_interview.utils.AppConstants;
 import com.vladan.color_interview.viewmodel.PersonViewModel;
 
@@ -48,7 +49,7 @@ public class PersonFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ViewModelProvider(this, mFactory).get(PersonViewModel.class);
+        mViewModel = new ViewModelProvider(getActivity(), mFactory).get(PersonViewModel.class);
     }
 
     @Nullable
@@ -78,31 +79,21 @@ public class PersonFragment extends Fragment {
         observeViewModel(mViewModel);
     }
 
-    private void setPerson(ApiResponsePerson apiResponsePerson) {
-
-        if (person != null) {
-            person.clear();
-        }
-        person = (Map<String, String>) apiResponsePerson.data;
-        tvId.setText("Id: " + person.getOrDefault("id", ""));
-        tvFirstName.setText("First name: " + person.getOrDefault("firstName", ""));
-        if (person.getOrDefault("age", "") == "") {
-            tvAge.setText("");
-        } else {
-            String age = String.valueOf((person.getOrDefault("age", "")));
-            tvAge.setText("Age: " + age.substring(0, age.length() - 2));
-        }
-        tvLastName.setText("Last name: " + (person.getOrDefault("lastName", "")));
-        tvGender.setText("Gender: " + person.getOrDefault("gender", ""));
-        tvCountry.setText("Country: " + person.getOrDefault("country", ""));
+    private void setPerson(Person person) {
+        tvId.setText(person.id);
+        tvFirstName.setText(person.firstName);
+        tvLastName.setText(person.lastName);
+        tvAge.setText(person.age);
+        tvGender.setText(person.gender);
+        tvCountry.setText(person.country);
 
     }
 
     private void observeViewModel(PersonViewModel personViewModel) {
-        personViewModel.getPersonLiveData().observe(getViewLifecycleOwner(), new Observer<ApiResponsePerson>() {
+        personViewModel.getPersonLiveData().observe(getViewLifecycleOwner(), new Observer<Person>() {
             @Override
-            public void onChanged(ApiResponsePerson apiResponsePerson) {
-                setPerson(apiResponsePerson);
+            public void onChanged(Person person) {
+                setPerson(person);
             }
         });
     }
