@@ -37,19 +37,18 @@ public class PersonFragment extends Fragment {
     private TextView tvGender;
     private TextView tvCountry;
     private static String mId;
-    Map<String, String> person;
     ViewModelProvider.Factory mFactory = new ViewModelProvider.Factory() {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new PersonViewModel(getActivity(), mId);
+            return (T) new PersonViewModel(getContext(), mId);
         }
     };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ViewModelProvider(getActivity(), mFactory).get(PersonViewModel.class);
+        mViewModel = new ViewModelProvider(this, mFactory).get(PersonViewModel.class);
     }
 
     @Nullable
