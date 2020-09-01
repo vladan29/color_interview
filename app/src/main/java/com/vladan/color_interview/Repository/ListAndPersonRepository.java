@@ -7,8 +7,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.vladan.color_interview.api.ApiService;
-import com.vladan.color_interview.model.ListIds;
 import com.vladan.color_interview.model.ApiResponsePerson;
+import com.vladan.color_interview.model.ListIds;
+import com.vladan.color_interview.model.Person;
+import com.vladan.color_interview.view.ui.MainActivity;
+
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,14 +65,15 @@ public class ListAndPersonRepository {
         return data;
     }
 
-    public LiveData<ApiResponsePerson> getPersonDetails(String id) {
-        final MutableLiveData<ApiResponsePerson> data = new MutableLiveData<>();
+    public LiveData<Person> getPersonDetails(String id) {
+        final MutableLiveData<Person> personMutableLiveData = new MutableLiveData<>();
         mApiService.getPersonDetails(id).enqueue(new Callback<ApiResponsePerson>() {
             @Override
             public void onResponse(@NotNull Call<ApiResponsePerson> call, @NotNull Response<ApiResponsePerson> response) {
                 if (response.isSuccessful()) {
                     simulateDelay();
-                    data.setValue(response.body());
+                    assert response.body() != null;
+                    personMutableLiveData.setValue(response.body().data);
                 } else {
                     String message = response.message();
                     Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
@@ -78,12 +82,12 @@ public class ListAndPersonRepository {
 
             @Override
             public void onFailure(@NotNull Call<ApiResponsePerson> call, @NotNull Throwable t) {
-                data.setValue(null);
+                personMutableLiveData.setValue(null);
                 String errorMessage = t.getMessage();
                 Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
             }
         });
-        return data;
+        return personMutableLiveData;
     }
 
     private void simulateDelay() {
